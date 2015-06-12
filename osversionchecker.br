@@ -1,0 +1,35 @@
+/*
+This is a bussiness rule which is run if on all linux machines which have an os version. This checks from the Available OS Versions database to check if the version is supported. If it isnt, it will check to see if the ticket is already has been created. if not, it will create it. 
+*/
+
+checkVersionAllowed(current);
+function checkVersionAllowed(currComp){
+	var versions = new GlideRecord("u_acceptable_os_version");
+	versions.addEncodedQuery("u_os_versionSTARTSWITH"+currComp.os_version);
+		gs.log(currComp.os_version);
+	versions.query();
+	if(versions.getRowCount()==0){
+		//log call
+		gs.log(currComp.os_version);
+		var checkOpenTickets= new GlideRecord('incident');
+		checkOpenTickets.addEncodedQuery("short_descriptionSTARTSWITH"+currComp.name+"'s kernel is outdated^stateIN1");
+		checkOpenTickets.query();
+		if(!checkOpenTickets.getRowCount()>0){
+			var gr= new GlideRecord('incident');
+			gr.initialize();
+			gr.cmdb_ci=current.sys_id;
+			gr.short_description = currComp.name + "'s kernel is outdated";
+			gr.assignment_group='d625dccec0a8016700a222a0f7900d06';
+			gr.caller_id='88dd4196806402007f44ebef8b01221f';
+			gr.category='Hardware';
+			gr.insert();
+			
+			gs.log("Log inc");
+		}else{
+			gs.log("current ticket open");
+		}
+	}else{
+		gs.log("Version upto date");
+	}
+}
+	

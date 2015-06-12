@@ -1,0 +1,33 @@
+/*
+This is the business rule called DiskSpaceChecker which is run when a machine is inserted into the Computer Table. If the disk space is below 90% then an incident will be created for it and assigned to the service desk. 
+*/
+
+checkDiskSpace(current);
+
+function checkDiskSpace(currComp){
+		var tmp = currComp.u__temp_usage____;
+		var usr = currComp.u__usr_usage____;
+		var varP = currComp.u__var_usage____;
+		var diskUsed = currComp.u_disk_used__gb_;
+		var diskAvail = currComp.u_disk_space__gb_;
+	if(tmp > 90 || usr > 90 ||  varP > 90 || (diskUsed/diskAvail)>0.9){
+		gs.log(currComp.name + " is running low on disk spacee");
+		var checkOpenTickets= new GlideRecord('incident');
+		checkOpenTickets.addEncodedQuery("short_descriptionSTARTSWITH"+currComp.u_name+"'s Disk Space is low^stateIN1");
+		checkOpenTickets.query();
+		if(!checkOpenTickets.getRowCount()>0){
+			var gr= new GlideRecord('incident');
+			gr.initialize();
+			gr.cmdb_ci=current.sys_id;
+			gr.short_description = currComp.u_name+"'s Disk Space is low";
+			gr.assignment_group='d625dccec0a8016700a222a0f7900d06';
+			gr.caller_id='88dd4196806402007f44ebef8b01221f';
+			gr.category='Hardware';
+			gr.work_notes="/var Usage: "+ varP + "% \n/tmp Usage: "+ tmp + "% \n/usr Usage: "+ usr + "% \n Disk Available: "+ diskAvail + "GB \n Disk Used: "+ diskUsed + "GB \n";
+			gr.insert();
+			gs.log("Log inc");
+		}else{
+			gs.log("current ticket open");
+		}
+	}
+}
