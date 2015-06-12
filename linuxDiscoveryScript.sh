@@ -5,37 +5,53 @@ echo "Starting Descovery Script as $USER"
 echo "===================================="
 function getIP()
 {
-    local  ip=$(hostname -i)
-    echo "$ip"
+
+        local  ip=$(hostname -i)
+        size=${#ip}
+        if [ $size > 15 ]
+        then
+                ip=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' |head -1)
+        fi
+        echo "$ip"
 }
 function getHostname(){
-	local hostname=$(hostname -s)
-	echo "$hostname"
+        local hostname=$(hostname -s)
+        echo "$hostname"
 }
 function getRAM(){
-	local ramKB=$(less /proc/meminfo | grep "MemTotal" | grep -o '[0-9]*')
-	let ram=$ramKB/1024
-	echo "$ram"
+        local ramKB=$(less /proc/meminfo | grep "MemTotal" | grep -o '[0-9]*')
+        let ram=$ramKB/1024
+        echo "$ram"
 }
 function getKernel(){
-	local kernel=$(uname -r)
-	echo "$kernel"
+        local kernel=$(uname -r)
+        echo "$kernel"
 }
 function getMacAddress(){
-	local mac=$(cat /sys/class/net/eth?/address)
-	echo "$mac"
+        if [ -e /sys/class/net/eth?/address ]
+        then
+                local mac=$(cat /sys/class/net/eth?/address)
+        else
+                 local mac=$( ifconfig | grep "ether" |head -1 | grep -o '[0-9:a-z]*' |head -2| tail -1)
+        fi
+        echo "$mac"
 }
 function getDiskSpace(){
-	local disk=$( df -BG -l --total | grep "total" | grep -o '[0-9]*' | head -1)
-	echo "$disk"
+        local disk=$( df -BG -l --total | grep "total" | grep -o '[0-9]*' | head -1)
+        echo "$disk"
 }
 function getDiskUsed(){
-	local disk=$( df -BG -l --total | grep "total" | grep -o '[0-9]*' | tail -n -3 |head -1)
-	echo "$disk"
+        local disk=$( df -BG -l --total | grep "total" | grep -o '[0-9]*' | tail -n -3 |head -1)
+        echo "$disk"
 }
 function getOS(){
-	local os=$(cat /etc/*-release | grep "release" |head -1)
-	echo "$os"
+        local os=$(cat /etc/*-release | grep "release" |head -1)
+        if [ -z "$os" ]
+        then
+                os=$(lsb_release -d -s)
+        fi
+
+        echo "$os"
 }
 function getVarUsedPercent(){
 	local used=$(df -BG -l --total | grep "var" | grep -o '[0-9]*' | tail -n -1)

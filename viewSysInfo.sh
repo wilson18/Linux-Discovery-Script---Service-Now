@@ -5,8 +5,14 @@ echo "Starting Descovery Script as $USER"
 echo "===================================="
 function getIP()
 {
-    local  ip=$(hostname -i)
-    echo "$ip"
+ 
+	local  ip=$(hostname -i)
+	size=${#ip}
+	if [ $size > 15 ]
+	then
+		ip=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' |head -1)
+	fi
+	echo "$ip"
 }
 function getHostname(){
 	local hostname=$(hostname -s)
@@ -22,7 +28,12 @@ function getKernel(){
 	echo "$kernel"
 }
 function getMacAddress(){
-	local mac=$(cat /sys/class/net/eth?/address)
+	if [ -e /sys/class/net/eth?/address ]
+        then
+                local mac=$(cat /sys/class/net/eth?/address)
+	else
+		 local mac=$( ifconfig | grep "ether" |head -1 | grep -o '[0-9:a-z]*' |head -2| tail -1)
+	fi
 	echo "$mac"
 }
 function getDiskSpace(){
@@ -35,6 +46,11 @@ function getDiskUsed(){
 }
 function getOS(){
 	local os=$(cat /etc/*-release | grep "release" |head -1)
+	if [ -z "$os" ]
+	then	
+		os=$(lsb_release -d -s)
+	fi
+
 	echo "$os"
 }
 function getVarUsedPercent(){
