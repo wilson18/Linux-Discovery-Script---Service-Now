@@ -100,6 +100,11 @@ function getCPUManu(){
         local manu=$(lscpu | grep "Vendor ID:" | grep -o '[0-9a-zA-Z]*' |tail -1);
         echo "$manu"
 }
+function getSerial(){
+	local serial=$(dmidecode -s system-serial-number)
+	echo "$serial"
+}
+serial=$(getSerial)
 serverType=$(checkServerType)
 cores=$(getCPUCoreCount)
 cpus=$(getCPUCount)
@@ -143,6 +148,7 @@ echo "CPU Speed          $speed Mhz"
 echo "CPU Manufacturor         $cpuManu"
 echo "          Other"
 echo "===================================="
+echo "Serial Number:    $serial"
 echo "Server Type:      $serverType"
 echo "===================================="
 echo "       Adding to Service Now"

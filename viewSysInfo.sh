@@ -98,6 +98,11 @@ function getCPUManu(){
 	local manu=$(lscpu | grep "Vendor ID:" | grep -o '[0-9a-zA-Z]*' |tail -1);
 	echo "$manu"
 }
+function getSerial(){
+        local serial=$(dmidecode -s system-serial-number)
+        echo "$serial"
+}
+serial=$(getSerial)
 serverType=$(checkServerType)
 cores=$(getCPUCoreCount)
 cpus=$(getCPUCount)
@@ -118,28 +123,30 @@ usrUsed=$(getUsrUsedPercent)
 speed=$(getCoreSpeed)
 echo "            General"
 echo "===================================="
-echo "Name: 		$hostname"
+echo "Name:             $hostname"
 echo "Domain:         $domain"
-echo "OS: 		$os"
-echo "Kernel:		$kernel"
-echo "IP:   		$ip"
-echo "Mac Address:	$mac"
-echo "RAM:		$ram MB"
+echo "OS:               $os"
+echo "Kernel:           $kernel"
+echo "IP:               $ip"
+echo "Mac Address:      $mac"
+echo "RAM:              $ram MB"
 echo "          HDD Infomation"
 echo "===================================="
-echo "DiskSpace 		$disk GB"
-echo "DiskUsed 		$diskUsed GB"
-echo "/var usage		$varUsed %"
-echo "/usr usage 		$usrUsed %"
-echo "/tmp usage 		$tmpUsed %"
+echo "DiskSpace                 $disk GB"
+echo "DiskUsed          $diskUsed GB"
+echo "/var usage                $varUsed %"
+echo "/usr usage                $usrUsed %"
+echo "/tmp usage                $tmpUsed %"
 echo "            CPU Information"
 echo "===================================="
 echo "Number of CPUs           $cpus"
-echo "Number of Cores		 $cores"
+echo "Number of Cores            $cores"
 echo "CPU Name                $cputype"
-echo "CPU Speed		 $speed Mhz"
+echo "CPU Speed          $speed Mhz"
 echo "CPU Manufacturor         $cpuManu"
-echo "		Other"
+echo "          Other"
 echo "===================================="
-echo "Server Type: 	$serverType" 
+echo "Serial Number:    $serial"
+echo "Server Type:      $serverType"
+echo "===================================="
 
