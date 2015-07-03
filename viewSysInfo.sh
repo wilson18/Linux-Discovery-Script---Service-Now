@@ -102,6 +102,17 @@ function getSerial(){
         local serial=$(dmidecode -s system-serial-number)
         echo "$serial"
 }
+function getArch(){
+	local arch=$(arch)
+	if [ "$arch" -eq 'x86_64' ]
+	then
+		arch="64"
+	else
+		arch="32"
+	fi
+echo "$arch"
+}
+arch=$(getArch)
 serial=$(getSerial)
 serverType=$(checkServerType)
 cores=$(getCPUCoreCount)
@@ -126,6 +137,7 @@ echo "===================================="
 echo "Name:             $hostname"
 echo "Domain:         $domain"
 echo "OS:               $os"
+echo "Arch:             $arch"
 echo "Kernel:           $kernel"
 echo "IP:               $ip"
 echo "Mac Address:      $mac"
