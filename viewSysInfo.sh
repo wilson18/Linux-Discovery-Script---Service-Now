@@ -86,8 +86,23 @@ function getDomain(){
 	local domain=$(hostname)
 	echo "$domain"
 }
+function getCPUCount(){
+	local cpus=$(lscpu | grep "Socket(s)" | grep -o '[0-9]*' | head -1)
+	echo "$cpus"
+}
+function getCPUType(){
+	local type=$(lscpu | grep "Model name" |cut -c 12- |sed "s/^[ \t]*//")
+	echo "$type"
+}
+function getCPUManu(){
+	local manu=$(lscpu | grep "Vendor ID:" | grep -o '[0-9a-zA-Z]*' |tail -1);
+	echo "$manu"
+}
 serverType=$(checkServerType)
 cores=$(getCPUCoreCount)
+cpus=$(getCPUCount)
+cputype=$(getCPUType)
+cpuManu=$(getCPUManu)
 ip=$(getIP)
 hostname=$(getHostname)
 domain=$(getDomain)
@@ -119,8 +134,11 @@ echo "/usr usage 		$usrUsed %"
 echo "/tmp usage 		$tmpUsed %"
 echo "            CPU Information"
 echo "===================================="
-echo "Number of Cores		$cores"
-echo "CPU Speed		$speed Mhz"
+echo "Number of CPUs           $cpus"
+echo "Number of Cores		 $cores"
+echo "CPU Name                  $cputype"
+echo "CPU Speed		 $speed Mhz"
+echo "CPU Manufacturor         $cpuManu"
 echo "		Other"
 echo "===================================="
 echo "Server Type: 	$serverType" 
