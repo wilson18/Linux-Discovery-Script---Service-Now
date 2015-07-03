@@ -16,10 +16,6 @@ function getHostname(){
         local hostname=$(hostname -s)
         echo "$hostname"
 }
-function getDomain(){
-	local domain=$(hostname)
-	echo "$domain"
-}
 function getRAM(){
 	local ramKB=$(less /proc/meminfo | grep "MemTotal" | grep -o '[0-9]*')
 	let ram=$ramKB/1024
@@ -85,6 +81,10 @@ function checkServerType(){
                 $type = "Database"
 	fi
         echo "$type"
+}
+function getDomain(){
+	local domain=$(hostname)
+	echo "$domain"
 }
 serverType=$(checkServerType)
 cores=$(getCPUCoreCount)

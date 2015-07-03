@@ -84,10 +84,15 @@ function checkServerType(){
 	fi
         echo "$type"
 }
+function getDomain(){
+        local domain=$(hostname)
+        echo "$domain"
+}
 serverType=$(checkServerType)
 cores=$(getCPUCoreCount)
 ip=$(getIP)
 hostname=$(getHostname)
+domain=$(getDomain)
 ram=$(getRAM)
 kernel=$(getKernel)
 mac=$(getMacAddress)
@@ -100,36 +105,30 @@ usrUsed=$(getUsrUsedPercent)
 speed=$(getCoreSpeed)
 echo "            General"
 echo "===================================="
-echo "Name: 		$hostname"
-echo "OS: 		$os"
-echo "Kernel:		$kernel"
-echo "IP:   		$ip"
-echo "Mac Address:	$mac"
-echo "RAM:		$ram MB"
+echo "Name:             $hostname"
+echo "Domain:         $domain"
+echo "OS:               $os"
+echo "Kernel:           $kernel"
+echo "IP:               $ip"
+echo "Mac Address:      $mac"
+echo "RAM:              $ram MB"
 echo "          HDD Infomation"
 echo "===================================="
-echo "DiskSpace 		$disk GB"
-echo "DiskUsed 		$diskUsed GB"
-echo "/var usage		$varUsed %"
-echo "/usr usage 		$usrUsed %"
-echo "/tmp usage 		$tmpUsed %"
+echo "DiskSpace                 $disk GB"
+echo "DiskUsed          $diskUsed GB"
+echo "/var usage                $varUsed %"
+echo "/usr usage                $usrUsed %"
+echo "/tmp usage                $tmpUsed %"
 echo "            CPU Information"
 echo "===================================="
-echo "Number of Cores		$cores"
-echo "CPU Speed		$speed Mhz"
-echo "		Other"
+echo "Number of Cores           $cores"
+echo "CPU Speed         $speed Mhz"
+echo "          Other"
 echo "===================================="
-echo "Server Type: 	$serverType" 
+echo "Server Type:      $serverType"
 echo "===================================="
 echo "       Adding to Service Now"
 echo "===================================="
-
-#                        "u__usr_usage____":"'"$usrUsed"'",
-#                        "u__temp_usage____":"'"$tmpUsed"'",
-#                        "u__var_usage____":"'"$varUsed"'",
-#                        "u_type":"'"$serverType"'"
-
-
 
         curl --user rest-linuxhthd:FzZ0w7mMZzYy1GzD \
          --header "Content-Type:application/json" \
