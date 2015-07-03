@@ -1,6 +1,6 @@
 #!/bin/bash
 
-clear 
+clear
 echo "Starting Descovery Script as $USER"
 echo "===================================="
 function getIP()
@@ -124,31 +124,38 @@ echo "===================================="
 echo "       Adding to Service Now"
 echo "===================================="
 
+#                        "u__usr_usage____":"'"$usrUsed"'",
+#                        "u__temp_usage____":"'"$tmpUsed"'",
+#                        "u__var_usage____":"'"$varUsed"'",
+#                        "u_type":"'"$serverType"'"
 
-        curl --user ld_inserter:password \
+
+
+        curl --user rest-linuxhthd:FzZ0w7mMZzYy1GzD \
          --header "Content-Type:application/json" \
          --header "Accept: application/json" \
          --request POST \
-         --data '{"u_ip_address":"'"$ip"'",
-                        "u_name":"'"$hostname"'",
-                        "u_mac_address":"'"$mac"'",
-                        "u_ram__mb_":"'"$ram"'",
-                        "u_os_version":"'"$kernel"'",
-                        "u_disk_space__gb_":"'"$disk"'",
-                        "u_operating_system":"'"$os"'",
-                        "u_number_of_cores":"'"$cores"'",
-                        "u_disk_used__gb_":"'"$diskUsed"'",
-                        "u_cpu_speed__mhz_":"'"$speed"'",
-                        "u__usr_usage____":"'"$usrUsed"'",
-                        "u__temp_usage____":"'"$tmpUsed"'",
-                        "u__var_usage____":"'"$varUsed"'",
-                        "u_type":"'"$serverType"'"
+         --data '{"u_hostname":"'"$hostname"'",
+                        "u_domain":"'"$domain"'",
+                        "u_serialnumber":"'"$serial"'",
+			"u_ip":"'"$ip"'",
+			"u_dhcp":"'"$dhcp"'",
+                        "u_netmask":"'"$netmask"'",
+                        "u_mac":"'"$mac"'",
+			"u_architecture":"'"$arch"'",
+                        "u_ram":"'"$ram"'",
+			"u_os_version":"'"$kernel"'",
+                        "u_diskspace_used":"'"$diskUsed"'",
+                        "u_diskspace_total":"'"$disk"'",
+                        "u_os":"'"$os"'",
+                        "u_cpu_cores":"'"$cores"'",
+                        "u_cpu_count":"'"$cpus"'",
+                        "u_cpu_speed":"'"$speed"'"
 
 
 
 
 
  }' \
-https://peeur-dev-alp_birm001_060515053.lab.service-now.com/api/now/table/u_linux_cmdb_staging
-
+https://dev12489.service-now.com/api/now/table/u_linux_data_source
 

@@ -3,9 +3,7 @@
 clear 
 echo "Starting Descovery Script as $USER"
 echo "===================================="
-function getIP()
-{
- 
+function getIP(){
 	local  ip=$(hostname -i)
 	size=${#ip}
 	if [  -z $ip ] || [ $size > 15 ]
@@ -15,8 +13,12 @@ function getIP()
 	echo "$ip"
 }
 function getHostname(){
-	local hostname=$(hostname -s)
-	echo "$hostname"
+        local hostname=$(hostname -s)
+        echo "$hostname"
+}
+function getDomain(){
+	local domain=$(hostname)
+	echo "$domain"
 }
 function getRAM(){
 	local ramKB=$(less /proc/meminfo | grep "MemTotal" | grep -o '[0-9]*')
@@ -47,7 +49,7 @@ function getDiskUsed(){
 function getOS(){
 	local os=$(cat /etc/*-release | grep "release" |head -1)
 	if [ -z "$os" ]
-	then	
+	then
 		os=$(lsb_release -d -s)
 	fi
 
@@ -88,6 +90,7 @@ serverType=$(checkServerType)
 cores=$(getCPUCoreCount)
 ip=$(getIP)
 hostname=$(getHostname)
+domain=$(getDomain)
 ram=$(getRAM)
 kernel=$(getKernel)
 mac=$(getMacAddress)
@@ -101,6 +104,7 @@ speed=$(getCoreSpeed)
 echo "            General"
 echo "===================================="
 echo "Name: 		$hostname"
+echo "Domain:         $domain"
 echo "OS: 		$os"
 echo "Kernel:		$kernel"
 echo "IP:   		$ip"
