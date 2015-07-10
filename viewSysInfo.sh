@@ -104,7 +104,7 @@ function getSerial(){
 }
 function getArch(){
 	local arch=$(arch)
-	if [ "$arch" -eq 'x86_64' ]
+	if [ "$arch" == "x86_64" ]
 	then
 		arch="64"
 	else
